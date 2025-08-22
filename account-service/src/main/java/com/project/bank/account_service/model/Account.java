@@ -39,6 +39,6 @@ public class Account {
     private String status;
     
     //foreign key to user service
-    private String userID; //type uuid is a string in nature
+    private UUID userID; 
 
 }
