@@ -10,6 +10,5 @@ import com.project.bank.account_service.model.Account;
 public interface AccountRepo extends JpaRepository<Account, UUID> {
 
     List<Account> findByUserId(UUID userId);
-
     Boolean existsByAccountNumber(String accountNumber);
 }

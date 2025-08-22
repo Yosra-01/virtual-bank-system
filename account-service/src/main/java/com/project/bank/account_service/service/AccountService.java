@@ -18,6 +18,7 @@ public class AccountService {
         this.accountRepo = accountRepo;
     }
 
+    // -> post
     public Account createAccount(UUID userId, AccountType type, BigDecimal initialbalance){
         Account account = Account.builder()
             .accountNumber(AccountNumberGenerator.generate(accountRepo))
@@ -29,6 +30,7 @@ public class AccountService {
         return accountRepo.save(account);
     }
 
+    // -> get
     public Optional<Account> getAccount(UUID accountId){
         return accountRepo.findById(accountId);
     }
@@ -37,12 +39,12 @@ public class AccountService {
         return accountRepo.findByUserId(userId);
     }
 
+    // -> put
     public void transfer(BigDecimal amount, UUID senderAccount, UUID recvAccount){
         
         Account sender = accountRepo.findById(senderAccount).orElseThrow(() -> new RuntimeException("Sender Account Not Found"));
         Account reciever = accountRepo.findById(recvAccount).orElseThrow(() -> new RuntimeException("Recieving Account Not Found"));
 
-        //sender balance < amount 
         if (sender.getBalance().compareTo(amount) < 0)
             throw new RuntimeException("Insufficient Funds");
 
