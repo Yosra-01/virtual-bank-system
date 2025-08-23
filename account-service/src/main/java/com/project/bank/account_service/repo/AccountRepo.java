@@ -1,5 +1,6 @@
 package com.project.bank.account_service.repo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,4 +14,8 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
 
     List<Account> findByUserId(UUID userId);
     Boolean existsByAccountNumber(String accountNumber);
+
+    //scheduled job -> last transaction???
+    List<Account> findByStatusAndLastTransactionBefore(String status, LocalDateTime cutoffTime);
+
 }

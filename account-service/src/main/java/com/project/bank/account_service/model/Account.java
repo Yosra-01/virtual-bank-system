@@ -1,6 +1,7 @@
 package com.project.bank.account_service.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,5 +50,7 @@ public class Account {
     //foreign key to user service
     @NotNull(message = "User ID is required")
     private UUID userId; 
+
+    private LocalDateTime lastTransaction;
 
 }

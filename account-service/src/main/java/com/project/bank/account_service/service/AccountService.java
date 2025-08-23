@@ -1,10 +1,12 @@
 package com.project.bank.account_service.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.project.bank.account_service.model.Account;
@@ -65,7 +67,31 @@ public class AccountService {
         accountRepo.save(sender);
         accountRepo.save(receiver);
 
+        //keep track for scheduled job
+        sender.setLastTransaction(LocalDateTime.now());
+        receiver.setLastTransaction(LocalDateTime.now());
+
         return TransferStatus.SUCCESS;
 
     }
+
+    //scheduled job service logic
+    public void deactivateStaleAccounts(){
+
+        LocalDateTime cutoffTime = LocalDateTime.now().minusHours(24);
+        List<Account> staleAccounts = accountRepo.findByStatusAndLastTransactionBefore("ACTIVE", cutoffTime);
+
+        for (Account account : staleAccounts) {
+            account.setStatus("INACTIVE");
+        } 
+
+        accountRepo.saveAll(staleAccounts);
+
+    }
+    
+    @Scheduled(fixedRate = 3_600_000) //1 hour in msec
+    public void scheduledJob(){
+        deactivateStaleAccounts();
+    }
+
 }
