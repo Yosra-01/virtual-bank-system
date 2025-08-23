@@ -1,6 +1,6 @@
-package com.virtualBank.Transaction.repository;
+package com.project.bank.Transaction.repository;
 
-import com.virtualBank.Transaction.entity.TransactionEntity;
+import com.project.bank.Transaction.entity.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

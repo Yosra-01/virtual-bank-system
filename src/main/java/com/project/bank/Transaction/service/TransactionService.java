@@ -1,11 +1,12 @@
-package com.virtualBank.Transaction.service;
+package com.project.bank.Transaction.service;
 
-import com.virtualBank.Transaction.entity.*;
-import com.virtualBank.Transaction.exception.BadRequestException;
-import com.virtualBank.Transaction.exception.NotFoundException;
-import com.virtualBank.Transaction.mapper.TransactionMapper;
-import com.virtualBank.Transaction.repository.TransactionRepository;
-import com.virtualBank.Transaction.dto.*;
+import com.project.bank.Transaction.dto.*;
+import com.project.bank.Transaction.entity.TransactionEntity;
+import com.project.bank.Transaction.entity.TransactionStatus;
+import com.project.bank.Transaction.exception.BadRequestException;
+import com.project.bank.Transaction.exception.NotFoundException;
+import com.project.bank.Transaction.mapper.TransactionMapper;
+import com.project.bank.Transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

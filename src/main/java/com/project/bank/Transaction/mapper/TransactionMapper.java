@@ -1,8 +1,8 @@
-package com.virtualBank.Transaction.mapper;
+package com.project.bank.Transaction.mapper;
 
-import com.virtualBank.Transaction.dto.TransactionRequest;
-import com.virtualBank.Transaction.dto.TransactionResponse;
-import com.virtualBank.Transaction.entity.TransactionEntity;
+import com.project.bank.Transaction.dto.TransactionRequest;
+import com.project.bank.Transaction.dto.TransactionResponse;
+import com.project.bank.Transaction.entity.TransactionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

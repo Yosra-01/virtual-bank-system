@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction.entity;
+package com.project.bank.Transaction.entity;
 
 import lombok.*;
 import jakarta.persistence.*;

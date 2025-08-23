@@ -1,10 +1,10 @@
-package com.virtualBank.Transaction.controller;
+package com.project.bank.Transaction.controller;
 
-import com.virtualBank.Transaction.dto.TransactionExecutionRequest;
-import com.virtualBank.Transaction.dto.TransactionRequest;
-import com.virtualBank.Transaction.dto.TransactionResponse;
-import com.virtualBank.Transaction.entity.TransactionEntity;
-import com.virtualBank.Transaction.service.TransactionService;
+import com.project.bank.Transaction.dto.TransactionExecutionRequest;
+import com.project.bank.Transaction.dto.TransactionRequest;
+import com.project.bank.Transaction.dto.TransactionResponse;
+import com.project.bank.Transaction.entity.TransactionEntity;
+import com.project.bank.Transaction.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction.exception;
+package com.project.bank.Transaction.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

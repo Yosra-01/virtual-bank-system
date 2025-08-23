@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction.entity;
+package com.project.bank.Transaction.entity;
 
 public enum TransactionStatus {
     INITIATED, SUCCESS, FAILED

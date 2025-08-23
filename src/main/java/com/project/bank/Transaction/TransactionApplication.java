@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction;
+package com.project.bank.Transaction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

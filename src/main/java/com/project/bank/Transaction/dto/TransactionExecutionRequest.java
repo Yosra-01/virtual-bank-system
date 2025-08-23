@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction.dto;
+package com.project.bank.Transaction.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

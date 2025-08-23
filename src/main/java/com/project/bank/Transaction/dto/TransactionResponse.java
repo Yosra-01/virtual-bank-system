@@ -1,4 +1,4 @@
-package com.virtualBank.Transaction.dto;
+package com.project.bank.Transaction.dto;
 
 import lombok.Builder;
 import lombok.Data;
