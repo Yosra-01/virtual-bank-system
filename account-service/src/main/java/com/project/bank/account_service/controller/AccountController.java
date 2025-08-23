@@ -1,6 +1,11 @@
 package com.project.bank.account_service.controller;
 
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,13 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.bank.account_service.dto.TransferRequest;
+import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
+import com.project.bank.account_service.service.TransferStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
-
-
+import jakarta.validation.Valid;
 
 
 
@@ -28,16 +34,21 @@ public class AccountController {
     }
 
     //CREATE
-    @Operation(summary = "Create a new employee")
+    @Operation(summary = "Create a new account")
     @ApiResponse(responseCode ="201", description = "Account created successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input data")
 
     @PostMapping("/accounts")
 
-    public String createAccount(@RequestBody String entity) {
-        //TODO: process POST request
+    public ResponseEntity<Account> createAccount(@RequestBody @Valid Account accountInfo) {
         
-        return entity;
+        Account newAccount = accountService.createAccount(
+            accountInfo.getUserID(),
+            accountInfo.getAccountType(),
+            accountInfo.getBalance()
+        );
+        
+        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
     
 
@@ -49,38 +60,54 @@ public class AccountController {
     @ApiResponse(responseCode = "200", description = "Account found")
     @ApiResponse(responseCode = "404", description = "Account not found")
 
-    @GetMapping("accounts/{accountId}")
+    @GetMapping("/accounts/{accountId}")
 
-    public String getAccount(String param) {
-        return new String();
+    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
+            
+        return accountService.getAccount(accountId)
+            .map (account -> new ResponseEntity<>(account, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
     @Operation(summary = "Get all user Accounts")
     @ApiResponse(responseCode = "200", description = "Account(s) found")
     @ApiResponse(responseCode = "404", description = "No Account found")
-   // @ApiResponse(responseCode = "400", description = "User does not exist") wla user microservice issue???
     @GetMapping("/users/{userId}/accounts")
 
-    public String getUserAccounts(String param) {
-        return new String();
+    public ResponseEntity<List<Account>> getUserAccounts(@PathVariable UUID userId) {
+
+        List<Account> accounts = accountService.getUserAccounts(userId);
+
+        return accounts.isEmpty()
+            ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+            : new ResponseEntity<>(accounts, HttpStatus.OK);
     }
+
     
-
-
 
     //UPDATE
     @Operation(summary = "Update employee by ID")
     @ApiResponse(responseCode = "200", description = "Account updated successfully")
     @ApiResponse(responseCode = "404", description = "Account not found")
-    @ApiResponse(responseCode = "409", description = "Insufficient funds to make the transfer") //409 conflict between request and resource availability
+    @ApiResponse(responseCode = "409", description = "Insufficient funds to make the transfer") //409 -> conflict between request and resource availability
 
-    @PutMapping("accounts/transfer")
+    @PutMapping("/accounts/transfer")
 
-    public String transfer(@PathVariable String id, @RequestBody String entity) {
-        //TODO: process PUT request
+    public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
         
-        return entity;
+        TransferStatus status = accountService.transfer(
+            request.getAmount(),
+            request.getSender(),
+            request.getReceiver()    
+        );
+        
+        return switch (status){
+            case SUCCESS -> ResponseEntity.ok("Successful Transfer");
+            case SENDER_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sender Account not found"); 
+            case RECEIVER_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Receiving Account not found");
+            case INSUFFICIENT_FUNDS -> ResponseEntity.status(HttpStatus.CONFLICT).body("Insufficient funds");
+        };
     }
     
 

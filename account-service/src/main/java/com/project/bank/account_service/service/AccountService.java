@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.model.AccountType;
 import com.project.bank.account_service.repo.AccountRepo;
 import com.project.bank.account_service.utils.AccountNumberGenerator;
 
+@Service
 public class AccountService {
 
     private final AccountRepo accountRepo;
@@ -40,18 +43,29 @@ public class AccountService {
     }
 
     // -> put
-    public void transfer(BigDecimal amount, UUID senderAccount, UUID recvAccount){
+    public TransferStatus transfer(BigDecimal amount, UUID senderAccount, UUID recvAccount){
         
-        Account sender = accountRepo.findById(senderAccount).orElseThrow(() -> new RuntimeException("Sender Account Not Found"));
-        Account reciever = accountRepo.findById(recvAccount).orElseThrow(() -> new RuntimeException("Recieving Account Not Found"));
+        Optional<Account> _sender = accountRepo.findById(senderAccount);
+        if(_sender.isEmpty()) 
+            return TransferStatus.SENDER_NOT_FOUND;
+
+        Optional<Account> _receiver = accountRepo.findById(recvAccount);
+        if(_receiver.isEmpty()) 
+            return TransferStatus.RECEIVER_NOT_FOUND;
+        
+        Account sender = _sender.get();
+        Account receiver = _receiver.get();
 
         if (sender.getBalance().compareTo(amount) < 0)
-            throw new RuntimeException("Insufficient Funds");
+            return TransferStatus.INSUFFICIENT_FUNDS;
 
         sender.setBalance(sender.getBalance().subtract(amount));
-        reciever.setBalance(reciever.getBalance().add(amount));
+        receiver.setBalance(receiver.getBalance().add(amount));
 
         accountRepo.save(sender);
-        accountRepo.save(reciever);
+        accountRepo.save(receiver);
+
+        return TransferStatus.SUCCESS;
+
     }
 }
