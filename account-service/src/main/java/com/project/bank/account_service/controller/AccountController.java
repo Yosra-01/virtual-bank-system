@@ -1,6 +1,7 @@
 package com.project.bank.account_service.controller;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,12 +41,14 @@ public class AccountController {
 
     @PostMapping("/accounts")
 
-    public ResponseEntity<Account> createAccount(@RequestBody @Valid Account accountInfo) {
+    public ResponseEntity<Account> createAccount( @Valid @RequestBody Account accountInfo) {
         
+        BigDecimal balance = accountInfo.getBalance() != null ? accountInfo.getBalance() : BigDecimal.ZERO;
+
         Account newAccount = accountService.createAccount(
-            accountInfo.getUserID(),
+            accountInfo.getUserId(),
             accountInfo.getAccountType(),
-            accountInfo.getBalance()
+            balance
         );
         
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);

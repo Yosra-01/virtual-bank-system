@@ -39,8 +39,8 @@ public class Account {
     @NotNull(message = "Account type is required")
     private AccountType accountType;
     
-    @NotNull(message = "Balance is required")
     @DecimalMin(value = "0.00", inclusive = true, message = "Balance cannot be less than zero")
+    @NotNull(message = "balance is required")
     private BigDecimal balance; //precise w/o rounding errors
     
     @JsonIgnore
@@ -48,6 +48,6 @@ public class Account {
     
     //foreign key to user service
     @NotNull(message = "User ID is required")
-    private UUID userID; 
+    private UUID userId; 
 
 }

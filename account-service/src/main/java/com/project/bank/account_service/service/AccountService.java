@@ -28,7 +28,7 @@ public class AccountService {
             .accountType(type)
             .balance(initialbalance)
             .status("ACTIVE")
-            .userID(userId)
+            .userId(userId)
             .build();
         return accountRepo.save(account);
     }
