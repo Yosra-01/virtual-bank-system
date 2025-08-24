@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bank.account_service.dto.TransferRequest;
+import com.project.bank.account_service.dto.AccountResponse;
 import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
 import com.project.bank.account_service.service.TransferStatus;
@@ -32,6 +33,15 @@ public class AccountController {
 
     public AccountController(AccountService accountService){
         this.accountService = accountService;
+    }
+    public static AccountResponse toResponse(Account a) {
+        return new AccountResponse(
+                a.getAccountId(),
+                a.getAccountType().name(),
+                a.getAccountNumber(),
+                a.getBalance(),
+                a.getStatus()
+        );
     }
 
     //CREATE
@@ -78,16 +88,14 @@ public class AccountController {
     @ApiResponse(responseCode = "404", description = "No Account found")
     @GetMapping("/users/{userId}/accounts")
 
-    public ResponseEntity<List<Account>> getUserAccounts(@PathVariable UUID userId) {
-
+    public ResponseEntity<List<AccountResponse>> getUserAccounts(@PathVariable UUID userId) {
         List<Account> accounts = accountService.getUserAccounts(userId);
-
-        return accounts.isEmpty()
-            ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-            : new ResponseEntity<>(accounts, HttpStatus.OK);
+        if (accounts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<AccountResponse> out = accounts.stream().map(AccountController::toResponse).toList();
+        return new ResponseEntity<>(out, HttpStatus.OK);
     }
 
-    
+
 
     //UPDATE
     @Operation(summary = "Update employee by ID")
