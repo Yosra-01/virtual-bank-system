@@ -8,7 +8,7 @@
 		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.project.bank</groupId>
+	<groupId>com.example</groupId>
 	<artifactId>bff-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bff-service</name>

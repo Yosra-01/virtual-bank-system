@@ -25,13 +25,20 @@ public class AccountService {
 
     // -> post
     public Account createAccount(UUID userId, AccountType type, BigDecimal initialbalance){
-        Account account = Account.builder()
-            .accountNumber(AccountNumberGenerator.generate(accountRepo))
-            .accountType(type)
-            .balance(initialbalance)
-            .status("ACTIVE")
-            .userId(userId)
-            .build();
+//        Account account = Account.builder()
+//            .accountNumber(AccountNumberGenerator.generate(accountRepo))
+//            .accountType(type)
+//            .balance(initialbalance)
+//            .status("ACTIVE")
+//            .userId(userId)
+//            .build();
+        Account account= new Account();
+        account.setAccountNumber(AccountNumberGenerator.generate(accountRepo)); // uses your existing generator
+        account.setAccountType(type);
+        account.setBalance(initialbalance);
+        account.setStatus("ACTIVE");
+        account.setUserId(userId);
+
         return accountRepo.save(account);
     }
 
