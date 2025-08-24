@@ -9,46 +9,48 @@ import java.util.UUID;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.project.bank.account_service.dto.AccountRequest;
+import com.project.bank.account_service.dto.AccountResponse;
+import com.project.bank.account_service.mapper.AccountMapper;
 import com.project.bank.account_service.model.Account;
-import com.project.bank.account_service.model.AccountType;
+import com.project.bank.account_service.model.AccountStatus;
+//import com.project.bank.account_service.model.AccountType;
 import com.project.bank.account_service.repo.AccountRepo;
-import com.project.bank.account_service.utils.AccountNumberGenerator;
+//import com.project.bank.account_service.utils.AccountNumberGenerator;
 
 @Service
 public class AccountService {
 
     private final AccountRepo accountRepo;
-
-    public AccountService(AccountRepo accountRepo) {
+    private final AccountMapper accountMapper;
+    
+    public AccountService(AccountRepo accountRepo, AccountMapper accountMapper ) {
         this.accountRepo = accountRepo;
+        this.accountMapper = accountMapper;
     }
+    
 
     // -> post
-    public Account createAccount(UUID userId, AccountType type, BigDecimal initialbalance){
-//        Account account = Account.builder()
-//            .accountNumber(AccountNumberGenerator.generate(accountRepo))
-//            .accountType(type)
-//            .balance(initialbalance)
-//            .status("ACTIVE")
-//            .userId(userId)
-//            .build();
-        Account account= new Account();
-        account.setAccountNumber(AccountNumberGenerator.generate(accountRepo)); // uses your existing generator
-        account.setAccountType(type);
-        account.setBalance(initialbalance);
-        account.setStatus("ACTIVE");
-        account.setUserId(userId);
-
-        return accountRepo.save(account);
+    public Account createAccount(AccountRequest accountRequest){
+        Account account = accountMapper.toEntity(accountRequest);
+        return accountRepo.save(account); //account number generator logic , setting account status??!!!
     }
 
     // -> get
-    public Optional<Account> getAccount(UUID accountId){
-        return accountRepo.findById(accountId);
+    public AccountResponse getAccount(UUID accountId){
+        Account account =  accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("404"));
+        AccountResponse response = accountMapper.toResponse(account);
+        return response;
     }
 
-    public List<Account> getUserAccounts(UUID userId){
-        return accountRepo.findByUserId(userId);
+    public List<AccountResponse> getUserAccounts(UUID userId){
+        List<Account> accounts = accountRepo.findByUserId(userId);
+
+        if(accounts.isEmpty())
+            throw new RuntimeException("404");
+
+        List<AccountResponse> response = accountMapper.toResponseList(accounts);
+        return response;
     }
 
     // -> put
@@ -86,10 +88,10 @@ public class AccountService {
     public void deactivateStaleAccounts(){
 
         LocalDateTime cutoffTime = LocalDateTime.now().minusHours(24);
-        List<Account> staleAccounts = accountRepo.findByStatusAndLastTransactionBefore("ACTIVE", cutoffTime);
+        List<Account> staleAccounts = accountRepo.findByStatusAndLastTransactionBefore(AccountStatus.ACTIVE, cutoffTime);
 
         for (Account account : staleAccounts) {
-            account.setStatus("INACTIVE");
+            account.setStatus(AccountStatus.INACTIVE);
         } 
 
         accountRepo.saveAll(staleAccounts);
