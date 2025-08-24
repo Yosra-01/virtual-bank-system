@@ -15,7 +15,7 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
     List<Account> findByUserId(UUID userId);
     Boolean existsByAccountNumber(String accountNumber);
 
-    //scheduled job -> last transaction???
+    //scheduled job 
     List<Account> findByStatusAndLastTransactionBefore(String status, LocalDateTime cutoffTime);
 
 }

@@ -40,7 +40,7 @@ public class AccountController {
                 a.getAccountType().name(),
                 a.getAccountNumber(),
                 a.getBalance(),
-                a.getStatus()
+                a.getStatus().name()
         );
     }
 
