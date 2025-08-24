@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,10 +27,9 @@ public class Account {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore //invisible to client 
     private UUID accountId; //uuid ensures uniqueness without needing a central ID generator. int/lomg can run out/collide
     
-    @JsonIgnore
+
     private String accountNumber; //String avoids number formatting problems
 
     @Enumerated(EnumType.STRING)
@@ -42,8 +39,7 @@ public class Account {
     @DecimalMin(value = "0.00", inclusive = true, message = "Balance cannot be less than zero")
     @NotNull(message = "balance is required")
     private BigDecimal balance; //precise w/o rounding errors
-    
-    @JsonIgnore
+  
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
     
@@ -54,7 +50,10 @@ public class Account {
     private LocalDateTime lastTransaction;
 
 
+    //Constructors//
     public Account(){}
+
+    //Getters & Setters//
     public UUID getAccountId() {
         return accountId;
     }
