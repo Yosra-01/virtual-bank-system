@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:transactiondb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 8082
+
+account:
+  service:
+    base-url: http://localhost:8081
+
+interest:
+  system:
+    account-id: SYSTEM-ACCOUNT
+  daily:
+    rate: 0.05
