@@ -17,14 +17,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @Entity
-
-
+@Data
+@AllArgsConstructor
+@Builder
 public class Account {
     
     @Id
@@ -44,7 +44,8 @@ public class Account {
     private BigDecimal balance; //precise w/o rounding errors
     
     @JsonIgnore
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
     
     //foreign key to user service
     @NotNull(message = "User ID is required")
@@ -86,11 +87,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public String getStatus() {
+    public AccountStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AccountStatus status) {
         this.status = status;
     }
 

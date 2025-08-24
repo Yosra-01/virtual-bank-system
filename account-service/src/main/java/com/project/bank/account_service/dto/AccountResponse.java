@@ -3,6 +3,7 @@ package com.project.bank.account_service.dto;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+
 public class AccountResponse {
     private UUID accountId;
     private String accountType;
