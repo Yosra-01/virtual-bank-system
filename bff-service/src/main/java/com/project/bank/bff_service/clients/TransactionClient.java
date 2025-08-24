@@ -9,6 +9,6 @@ import java.util.List;
 
 @FeignClient(name = "transaction-service", url = "${svc.tx.base-url}")
 public interface TransactionClient {
-    @GetMapping("/accounts/{accountId}/transactions")
+    @GetMapping("transactions/accounts/{accountId}/transactions")
     List<TransactionDto> getHistory(@PathVariable("accountId") String accountId);
 }

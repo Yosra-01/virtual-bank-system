@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.project.bank.user_service.UserServiceApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.120 s -- in com.project.bank.user_service.UserServiceApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.89 s -- in com.project.bank.user_service.UserServiceApplicationTests
