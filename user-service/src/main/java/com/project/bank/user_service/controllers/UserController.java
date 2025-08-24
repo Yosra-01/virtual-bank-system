@@ -39,7 +39,7 @@ private final UserService service;
     }
 
 //    --------Profile-----
-    @GetMapping("{userId}/profile")
+    @GetMapping("/{userId}/profile")
     public ProfileResponse profile(@PathVariable UUID userId, @RequestHeader(name = "X-User-Id", required = false) String headerUserId){
         if (headerUserId == null || !headerUserId.equals(userId.toString())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unauthorized");
