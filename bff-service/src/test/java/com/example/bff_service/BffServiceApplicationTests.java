@@ -1,4 +1,4 @@
-package com.project.bank.bff_service;
+package com.example.bff_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
