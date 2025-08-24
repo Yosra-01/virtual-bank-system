@@ -1,7 +1,5 @@
 package com.project.bank.account_service.controller;
 
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bank.account_service.dto.TransferRequest;
+import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
 import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
@@ -34,15 +33,7 @@ public class AccountController {
     public AccountController(AccountService accountService){
         this.accountService = accountService;
     }
-    public static AccountResponse toResponse(Account a) {
-        return new AccountResponse(
-                a.getAccountId(),
-                a.getAccountType().name(),
-                a.getAccountNumber(),
-                a.getBalance(),
-                a.getStatus().name()
-        );
-    }
+
 
     //CREATE
     @Operation(summary = "Create a new account")
@@ -51,15 +42,12 @@ public class AccountController {
 
     @PostMapping("/accounts")
 
-    public ResponseEntity<Account> createAccount( @Valid @RequestBody Account accountInfo) {
+    public ResponseEntity<Account> createAccount( @Valid @RequestBody AccountRequest request) {
         
-        BigDecimal balance = accountInfo.getBalance() != null ? accountInfo.getBalance() : BigDecimal.ZERO;
+        if(request.getBalance().equals(null))
+            throw new RuntimeException("400");
 
-        Account newAccount = accountService.createAccount(
-            accountInfo.getUserId(),
-            accountInfo.getAccountType(),
-            balance
-        );
+        Account newAccount = accountService.createAccount(request);
         
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
@@ -75,11 +63,10 @@ public class AccountController {
 
     @GetMapping("/accounts/{accountId}")
 
-    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
-            
-        return accountService.getAccount(accountId)
-            .map (account -> new ResponseEntity<>(account, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<AccountResponse> getAccount(@PathVariable UUID accountId) {
+           
+        AccountResponse account = accountService.getAccount(accountId);
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
 
@@ -89,10 +76,9 @@ public class AccountController {
     @GetMapping("/users/{userId}/accounts")
 
     public ResponseEntity<List<AccountResponse>> getUserAccounts(@PathVariable UUID userId) {
-        List<Account> accounts = accountService.getUserAccounts(userId);
-        if (accounts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<AccountResponse> out = accounts.stream().map(AccountController::toResponse).toList();
-        return new ResponseEntity<>(out, HttpStatus.OK);
+        
+        List<AccountResponse> accounts = accountService.getUserAccounts(userId);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
 
