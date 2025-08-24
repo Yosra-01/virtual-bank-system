@@ -1,4 +1,4 @@
-package com.project.bank.bff_service.Controllers;
+package com.project.bank.bff_service.controller;
 
 import com.project.bank.bff_service.clients.AccountClient;
 import com.project.bank.bff_service.clients.TransactionClient;
@@ -31,7 +31,7 @@ public class TestUserProfileController {
     public List<AccountDto> accounts(@PathVariable UUID userId) {
         return accountClient.getAccountsByUser(userId);
     }
-    @GetMapping("/account/{accountId}/transactions")
+    @GetMapping("/transactions/accounts/{accountId}/transactions")
     public List<TransactionDto> byAccount(@PathVariable String accountId) {
         List<TransactionDto> list = txClient.getHistory(accountId);
         return list != null ? list : List.of();
