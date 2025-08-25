@@ -17,7 +17,7 @@ import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
 //import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
-import com.project.bank.account_service.service.TransferStatus;
+
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -90,18 +90,13 @@ public class AccountController {
 
     public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
         
-        TransferStatus status = accountService.transfer(
+         accountService.transfer(
             request.getAmount(),
             request.getSender(),
             request.getReceiver()    
         );
         
-        return switch (status){
-            case SUCCESS -> ResponseEntity.ok("Successful Transfer");
-            case SENDER_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sender Account not found"); 
-            case RECEIVER_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Receiving Account not found");
-            case INSUFFICIENT_FUNDS -> ResponseEntity.status(HttpStatus.CONFLICT).body("Insufficient funds");
-        };
+        return ResponseEntity.ok("Successful Transfer");
     }
     
 
