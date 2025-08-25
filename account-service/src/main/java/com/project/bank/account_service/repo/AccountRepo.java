@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.project.bank.account_service.model.AccountType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +21,5 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
     //scheduled job 
     List<Account> findByStatusAndLastTransactionBefore(AccountStatus status, LocalDateTime cutoffTime);
 
+    List<Account> findByStatusAndAccountType(String status, AccountType accountType);
 }

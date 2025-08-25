@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,11 +29,11 @@ public class TransactionService {
     private final TransactionMapper mapper;
     private final RestTemplate restTemplate;
 
-    @Value("${account.service.base-url:http://localhost:8081}")
+    @Value("${account.service.base-url:http://localhost:8084}")
     private String accountServiceBaseUrl;
 
-    @Value("${interest.system.account-id:SYSTEM-ACCOUNT}")
-    private String systemAccountId;
+    @Value("${transaction.system-account-id}")
+    private UUID systemAccountId;
 
     @Value("${interest.daily.rate:0.05}")
     private double interestRate;
@@ -66,10 +67,6 @@ public class TransactionService {
                 throw new BadRequestException("Insufficient funds in source account.");
             }
 
-            if (!"ACTIVE".equalsIgnoreCase(fromAccount.getStatus()) ||
-                    !"ACTIVE".equalsIgnoreCase(toAccount.getStatus())) {
-                throw new BadRequestException("One or both accounts are not ACTIVE.");
-            }
 
         } catch (HttpClientErrorException.NotFound e) {
             throw new BadRequestException("Invalid 'from' or 'to' account ID.");
@@ -95,7 +92,7 @@ public class TransactionService {
 
         try {
             restTemplate.put(accountServiceBaseUrl + "/accounts/transfer",
-                    new AccountTransferRequest(tx.getFromAccountId(), tx.getToAccountId(), tx.getAmount()));
+                    new AccountTransferRequest(BigDecimal.valueOf(tx.getAmount()), UUID.fromString(tx.getFromAccountId()), UUID.fromString(tx.getToAccountId())));
             tx.setStatus(TransactionStatus.SUCCESS);
         } catch (Exception e) {
             tx.setStatus(TransactionStatus.FAILED);
@@ -107,7 +104,15 @@ public class TransactionService {
 
     // --- History ---
     public List<TransactionEntity> getHistory(String accountId) {
-        return repo.findByFromAccountIdOrToAccountIdOrderByTimestampDesc(accountId, accountId);
+        List<TransactionEntity> history = repo.findByFromAccountIdOrToAccountIdOrderByTimestampDesc(accountId, accountId);
+
+        if (history.isEmpty()) {
+            throw new NotFoundException(
+                    "No transactions found for account ID " + accountId + "."
+            );
+        }
+
+        return history;
     }
 
     // --- Daily Interest ---
@@ -117,15 +122,19 @@ public class TransactionService {
                 accountServiceBaseUrl + "/users/all/active-savings", AccountSummary[].class);
         if (accounts == null) return;
         for (AccountSummary acc : accounts) {
+            if (acc.getAccountId().equals(systemAccountId.toString())) {
+                continue;
+            }
             double interest = acc.getBalance() * interestRate / 365.0;
             if (interest > 0) {
                 TransactionRequest req = new TransactionRequest();
-                req.setFromAccountId(systemAccountId);
+                req.setFromAccountId(systemAccountId.toString());
                 req.setToAccountId(acc.getAccountId());
                 req.setAmount(interest);
                 req.setDescription("Daily interest");
                 TransactionResponse init = initiate(req);
                 execute(new TransactionExecutionRequest(init.getTransactionId()));
+                System.out.println("Daily interest: Crediting " + interest + " to account " + acc.getAccountId());
             }
         }
     }

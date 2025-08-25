@@ -23,6 +23,17 @@ public class AccountResponse {
         this.balance = balance;
         this.status = status;
     }
+
+    public static AccountResponse from(com.project.bank.account_service.model.Account account) {
+        return new AccountResponse(
+                account.getAccountId(),
+                account.getAccountType(),
+                account.getAccountNumber(),
+                account.getBalance(),
+                account.getStatus()
+        );
+    }
+
     public UUID getAccountId() { return accountId; }
     public AccountType getAccountType() { return accountType; }
     public String getAccountNumber() { return accountNumber; }
