@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.project.bank.account_service.model.AccountType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -106,6 +107,10 @@ public class AccountService {
     @Scheduled(fixedRate = 3_600_000) //1 hour in msec
     public void scheduledJob(){
         deactivateStaleAccounts();
+    }
+
+    public List<Account> getActiveSavingsAccounts() {
+        return accountRepo.findByStatusAndAccountType("ACTIVE", AccountType.SAVINGS);
     }
 
 }

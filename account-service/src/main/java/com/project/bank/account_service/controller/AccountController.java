@@ -3,6 +3,7 @@ package com.project.bank.account_service.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.project.bank.account_service.model.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +44,11 @@ public class AccountController {
     @PostMapping("/accounts")
 
     public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid AccountRequest request) {
-        
+
         AccountResponse newAccount = accountService.createAccount(request);
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
-    
+
 
 
 
@@ -56,11 +57,11 @@ public class AccountController {
     @Operation(summary = "Get Account by ID")
     @ApiResponse(responseCode = "200", description = "Account found")
     @ApiResponse(responseCode = "404", description = "Account not found")
-   
+
     @GetMapping("/accounts/{accountId}")
 
     public ResponseEntity<AccountResponse> getAccount(@PathVariable UUID accountId) {
-           
+
         AccountResponse account = accountService.getAccount(accountId);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
@@ -69,11 +70,11 @@ public class AccountController {
     @Operation(summary = "Get all user Accounts")
     @ApiResponse(responseCode = "200", description = "Account(s) found")
     @ApiResponse(responseCode = "404", description = "No Account found")
-    
+
     @GetMapping("/users/{userId}/accounts")
 
     public ResponseEntity<List<AccountResponse>> getUserAccounts(@PathVariable UUID userId) {
-        
+
         List<AccountResponse> accounts = accountService.getUserAccounts(userId);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
@@ -89,19 +90,24 @@ public class AccountController {
     @PutMapping("/accounts/transfer")
 
     public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
-        
+
          accountService.transfer(
             request.getAmount(),
             request.getSender(),
-            request.getReceiver()    
+            request.getReceiver()
         );
-        
+
         return ResponseEntity.ok("Successful Transfer");
     }
-    
 
-
-
-    
+    @GetMapping("/users/all/active-savings")
+    public ResponseEntity<List<AccountResponse>> getActiveSavingsAccounts() {
+        List<Account> accounts = accountService.getActiveSavingsAccounts();
+        if (accounts.isEmpty()) return ResponseEntity.notFound().build();
+        List<AccountResponse> out = accounts.stream()
+                .map(AccountResponse::from)
+                .toList();
+        return ResponseEntity.ok(out);
+    }
 
 }

@@ -14,8 +14,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AccountRequest {
 
     @Enumerated(EnumType.STRING)
@@ -31,7 +29,7 @@ public class AccountRequest {
     
     
     ///////////in case lombok doesn't work////////
-    /* 
+
     public AccountRequest(AccountType accountType, BigDecimal balance, UUID userId) {
         this.accountType = accountType;
         this.balance = balance;
@@ -49,7 +47,7 @@ public class AccountRequest {
     public void setUserId(UUID v) {userId = v; }
     public void setAccountType(AccountType v) { this.accountType = v; }
     public void setBalance(BigDecimal v) { this.balance = v; }
-    */
+
 
 }
 
