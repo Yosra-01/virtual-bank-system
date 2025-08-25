@@ -17,6 +17,7 @@ import com.project.bank.account_service.model.AccountStatus;
 //import com.project.bank.account_service.model.AccountType;
 import com.project.bank.account_service.repo.AccountRepo;
 //import com.project.bank.account_service.utils.AccountNumberGenerator;
+import com.project.bank.account_service.utils.AccountNumberGenerator;
 
 @Service
 public class AccountService {
@@ -31,9 +32,18 @@ public class AccountService {
     
 
     // -> post
-    public Account createAccount(AccountRequest accountRequest){
+    public AccountResponse createAccount(AccountRequest accountRequest){
+
         Account account = accountMapper.toEntity(accountRequest);
-        return accountRepo.save(account); //account number generator logic , setting account status??!!!
+
+        account.setAccountNumber(AccountNumberGenerator.generate(accountRepo));
+        account.setStatus(AccountStatus.ACTIVE);
+        account.setLastTransaction(null);
+
+        Account newAccount = accountRepo.save(account); 
+
+        AccountResponse response = accountMapper.toResponse(newAccount);
+        return response;
     }
 
     // -> get
