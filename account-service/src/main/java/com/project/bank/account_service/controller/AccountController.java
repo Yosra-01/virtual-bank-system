@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.bank.account_service.dto.TransferRequest;
 import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
-import com.project.bank.account_service.model.Account;
+//import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
 import com.project.bank.account_service.service.TransferStatus;
 
@@ -42,12 +42,12 @@ public class AccountController {
 
     @PostMapping("/accounts")
 
-    public ResponseEntity<Account> createAccount( @Valid @RequestBody AccountRequest request) {
+    public ResponseEntity<AccountResponse> createAccount( @Valid @RequestBody AccountRequest request) {
         
         if(request.getBalance().equals(null))
             throw new RuntimeException("400");
 
-        Account newAccount = accountService.createAccount(request);
+        AccountResponse newAccount = accountService.createAccount(request);
         
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
