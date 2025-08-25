@@ -44,11 +44,7 @@ public class AccountController {
 
     public ResponseEntity<AccountResponse> createAccount( @Valid @RequestBody AccountRequest request) {
         
-        if(request.getBalance().equals(null))
-            throw new RuntimeException("400");
-
         AccountResponse newAccount = accountService.createAccount(request);
-        
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
     
@@ -60,7 +56,7 @@ public class AccountController {
     @Operation(summary = "Get Account by ID")
     @ApiResponse(responseCode = "200", description = "Account found")
     @ApiResponse(responseCode = "404", description = "Account not found")
-
+   
     @GetMapping("/accounts/{accountId}")
 
     public ResponseEntity<AccountResponse> getAccount(@PathVariable UUID accountId) {
@@ -73,6 +69,7 @@ public class AccountController {
     @Operation(summary = "Get all user Accounts")
     @ApiResponse(responseCode = "200", description = "Account(s) found")
     @ApiResponse(responseCode = "404", description = "No Account found")
+    
     @GetMapping("/users/{userId}/accounts")
 
     public ResponseEntity<List<AccountResponse>> getUserAccounts(@PathVariable UUID userId) {
@@ -87,7 +84,7 @@ public class AccountController {
     @Operation(summary = "Update employee by ID")
     @ApiResponse(responseCode = "200", description = "Account updated successfully")
     @ApiResponse(responseCode = "404", description = "Account not found")
-    @ApiResponse(responseCode = "409", description = "Insufficient funds to make the transfer") //409 -> conflict between request and resource availability
+    @ApiResponse(responseCode = "400", description = "Insufficient funds to make the transfer") //400 -> conflict between request and resource availability
 
     @PutMapping("/accounts/transfer")
 

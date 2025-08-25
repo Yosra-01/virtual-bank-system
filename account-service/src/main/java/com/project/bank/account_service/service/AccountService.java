@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
+import com.project.bank.account_service.exception.BusinessException;
+import com.project.bank.account_service.exception.ErrorCode;
 import com.project.bank.account_service.mapper.AccountMapper;
 import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.model.AccountStatus;
@@ -36,6 +38,9 @@ public class AccountService {
 
         Account account = accountMapper.toEntity(accountRequest);
 
+        //if(accountRequest.getBalance().equals(null))
+           // throw new BusinessException(ErrorCode.INVALID_INPUT);
+
         account.setAccountNumber(AccountNumberGenerator.generate(accountRepo));
         account.setStatus(AccountStatus.ACTIVE);
         account.setLastTransaction(null);
@@ -48,7 +53,7 @@ public class AccountService {
 
     // -> get
     public AccountResponse getAccount(UUID accountId){
-        Account account =  accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("404"));
+        Account account =  accountRepo.findById(accountId).orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
         AccountResponse response = accountMapper.toResponse(account);
         return response;
     }
@@ -57,7 +62,7 @@ public class AccountService {
         List<Account> accounts = accountRepo.findByUserId(userId);
 
         if(accounts.isEmpty())
-            throw new RuntimeException("404");
+            throw new BusinessException(ErrorCode.ACCOUNTS_NOT_FOUND);
 
         List<AccountResponse> response = accountMapper.toResponseList(accounts);
         return response;
