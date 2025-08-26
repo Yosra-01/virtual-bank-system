@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: logging-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: logging-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        "[spring.json.trusted.packages]": "*"
+
+  datasource:
+    url: jdbc:h2:mem:loggingdb   # for dev/testing
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
