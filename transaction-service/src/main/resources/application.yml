@@ -1,18 +1,25 @@
+
 spring:
+  application:
+    name: transaction
+
   kafka:
     bootstrap-servers: localhost:9092   # adjust if different
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
   datasource:
     url: jdbc:h2:mem:transactiondb
     driverClassName: org.h2.Driver
     username: sa
     password: password
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
   h2:
     console:
       enabled: true
@@ -29,3 +36,6 @@ interest:
     account-id: SYSTEM-ACCOUNT
   daily:
     rate: 0.05
+
+transaction:
+  system-account-id: 3e0464ea-2d7b-4e58-8624-31cb21f74697

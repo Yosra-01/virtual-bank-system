@@ -23,25 +23,25 @@ public class TransactionController {
 
     @PostMapping("/transfer/initiation")
     public ResponseEntity<TransactionResponse> initiate(@Valid @RequestBody TransactionRequest req) {
-        loggingProducer.sendLog(req.toString(), "Request");
+        loggingProducer.sendLog(req, "Request");
         TransactionResponse response = service.initiate(req);
-        loggingProducer.sendLog(response.toString(), "Response");
+        loggingProducer.sendLog(response, "Response");
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/transfer/execution")
     public ResponseEntity<TransactionResponse> execute(@Valid @RequestBody TransactionExecutionRequest req) {
-        loggingProducer.sendLog(req.toString(), "Request");
+        loggingProducer.sendLog(req, "Request");
         TransactionResponse response = service.execute(req);
-        loggingProducer.sendLog(response.toString(), "Response");
+        loggingProducer.sendLog(response, "Response");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/accounts/{accountId}/transactions")
     public ResponseEntity<List<TransactionEntity>> history(@PathVariable String accountId) {
-        loggingProducer.sendLog("AccountId: " + accountId, "Request");
+        loggingProducer.sendLog(accountId, "Request");
         List<TransactionEntity> transactions = service.getHistory(accountId);
-        loggingProducer.sendLog(transactions.toString(), "Response");
+        loggingProducer.sendLog(transactions, "Response");
         return ResponseEntity.ok(transactions);
     }
 }
