@@ -39,7 +39,7 @@ public class AccountController {
     //CREATE
     @Operation(summary = "Create a new account")
     @ApiResponse(responseCode ="201", description = "Account created successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid input data") //check <----
+    @ApiResponse(responseCode = "400", description = "Invalid input data") 
 
     @PostMapping("/accounts")
 
