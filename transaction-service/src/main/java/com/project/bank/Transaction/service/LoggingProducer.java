@@ -1,10 +1,7 @@
 package com.project.bank.Transaction.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bank.Transaction.dto.LogMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
     
@@ -12,22 +9,25 @@ import java.time.LocalDateTime;
 
 @Service
 public class LoggingProducer {
-    private static final Logger logger = LoggerFactory.getLogger(LoggingProducer.class);
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper mapper = new ObjectMapper();
 
-    public LoggingProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    private final KafkaTemplate<String, LogMessage> kafkaTemplate;
+
+    @Value("${spring.application.name}") 
+    private String serviceName;
+
+    public LoggingProducer(KafkaTemplate<String, LogMessage> kafkaTemplate){
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendLog(String content, String type) {
-        try {
-            LogMessage log = new LogMessage(content, type, LocalDateTime.now().toString());
-            String json = mapper.writeValueAsString(log);
-            kafkaTemplate.send("logging-topic", json);
-            logger.info("Sent log to Kafka: {}", json);
-        } catch (JsonProcessingException e) {
-            logger.error("Failed to serialize log message", e);
-        }
+    public <T> void sendLog(T message, String messageType){
+        
+        LogMessage logMessage = new LogMessage();
+        
+        logMessage.setMessage(message);
+        logMessage.setMessageType(messageType);
+        logMessage.setTimestamp(LocalDateTime.now());
+        logMessage.setServiceName(serviceName);
+
+        kafkaTemplate.send("bankservices", logMessage);
     }
 }
