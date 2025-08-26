@@ -18,7 +18,7 @@ import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
 //import com.project.bank.account_service.model.Account;
 import com.project.bank.account_service.service.AccountService;
-
+import com.project.bank.account_service.service.LoggingProducerService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,9 +30,11 @@ import jakarta.validation.Valid;
 public class AccountController {
 
     private final AccountService accountService;
+    private final LoggingProducerService loggingProducer;
 
-    public AccountController(AccountService accountService){
+    public AccountController(AccountService accountService, LoggingProducerService loggingProducer){
         this.accountService = accountService;
+        this.loggingProducer = loggingProducer;
     }
 
 
@@ -44,8 +46,11 @@ public class AccountController {
     @PostMapping("/accounts")
 
     public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid AccountRequest request) {
-
+        loggingProducer.sendLog(request, "Request");
+        
         AccountResponse newAccount = accountService.createAccount(request);
+
+        loggingProducer.sendLog(newAccount, "Response");
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
 
@@ -61,8 +66,11 @@ public class AccountController {
     @GetMapping("/accounts/{accountId}")
 
     public ResponseEntity<AccountResponse> getAccount(@PathVariable UUID accountId) {
+        loggingProducer.sendLog(accountId, "Request");
 
         AccountResponse account = accountService.getAccount(accountId);
+
+        loggingProducer.sendLog(account, "Response");
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
@@ -74,8 +82,11 @@ public class AccountController {
     @GetMapping("/users/{userId}/accounts")
 
     public ResponseEntity<List<AccountResponse>> getUserAccounts(@PathVariable UUID userId) {
+        loggingProducer.sendLog(userId, "Request");
 
         List<AccountResponse> accounts = accountService.getUserAccounts(userId);
+
+        loggingProducer.sendLog(accounts, "Response");
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
@@ -91,22 +102,31 @@ public class AccountController {
 
     public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
 
+        loggingProducer.sendLog(request, "Request");
+
          accountService.transfer(
             request.getAmount(),
             request.getSender(),
             request.getReceiver()
         );
 
+        loggingProducer.sendLog("Successful Transfer", "Response");
         return ResponseEntity.ok("Successful Transfer");
     }
 
+    //For scheduled job in transactions
     @GetMapping("/users/all/active-savings")
     public ResponseEntity<List<AccountResponse>> getActiveSavingsAccounts() {
+
+        loggingProducer.sendLog(null , "Request");
+
         List<Account> accounts = accountService.getActiveSavingsAccounts();
         if (accounts.isEmpty()) return ResponseEntity.notFound().build();
         List<AccountResponse> out = accounts.stream()
                 .map(AccountResponse::from)
                 .toList();
+        
+        loggingProducer.sendLog(out, "Response");        
         return ResponseEntity.ok(out);
     }
 
