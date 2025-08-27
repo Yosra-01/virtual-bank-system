@@ -7,11 +7,12 @@ spring:
     consumer:
       group-id: logging-consumer-group
       auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         "[spring.json.trusted.packages]": "*"
-
+  h2:
+    console:
+      enabled: true       # Enable the H2 web console
+      path: /h2-console
   datasource:
     url: jdbc:h2:mem:loggingdb   # for dev/testing
     driver-class-name: org.h2.Driver
@@ -22,3 +23,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+server:
+  port: 8086  
+
