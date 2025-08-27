@@ -7,7 +7,7 @@ package com.project.bank.Transaction.dto;
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-public class LogMessage {
+public class LogMessage { 
      private String message;
     private String messageType; //"Request" or "Response"
     private String timestamp;
