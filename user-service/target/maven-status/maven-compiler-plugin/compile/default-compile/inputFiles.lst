@@ -1,12 +1,15 @@
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\config\SecurityConfig.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\controllers\UserController.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\ErrorResponse.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\LoginRequest.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\LoginResponse.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\ProfileResponse.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\RegisterRequest.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\DTOs\RegisterResponse.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\model\User.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\repository\UserRepository.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\service\UserService.java
-C:\Desktop\SpringBoot\Bank\virtual-bank-system\user-service\src\main\java\com\project\bank\user_service\UserServiceApplication.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\config\KafkaProducerConfig.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\config\SecurityConfig.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\controllers\UserController.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\ErrorResponse.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\LoginRequest.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\LoginResponse.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\LogMessage.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\ProfileResponse.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\RegisterRequest.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\DTOs\RegisterResponse.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\model\User.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\repository\UserRepository.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\service\LoggingProducer.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\service\UserService.java
+D:\Internship Ejada 2025\VirtualBank\user-service\src\main\java\com\project\bank\user_service\UserServiceApplication.java
