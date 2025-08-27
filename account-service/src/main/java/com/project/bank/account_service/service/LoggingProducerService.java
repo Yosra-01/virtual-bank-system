@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bank.account_service.dto.LogMessage;
 
-
+ 
 
 @Service
 public class LoggingProducerService {
