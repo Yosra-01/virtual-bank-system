@@ -18,6 +18,6 @@ public class BffDashboardController {
     @GetMapping("/dashboard/{userId}")
     public DashboardResponse getDashboard(@PathVariable UUID userId) {
         return dashboardService.buildDashboard(userId);
-    }
+    } 
 }
 

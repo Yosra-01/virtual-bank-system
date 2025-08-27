@@ -1,25 +1,22 @@
-services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+version: '3.8'
 
+services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
     ports:
       - "9092:9092"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    mem_limit: 512m
 
   mysql:
     image: mysql:8.0
@@ -28,5 +25,88 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    mem_limit: 512m
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  wso2am:
+    image: wso2/wso2am:latest
+    container_name: wso2am
+    ports:
+      - "9443:9443"
+      - "9763:9763"
+    depends_on:
+      - mysql
+      - kafka
+    mem_limit: 1.5g
+ 
+  user:
+    build:
+      context: ./user
+      dockerfile: ../Dockerfile.jdk21
+    container_name: user-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      - mysql
+      - kafka
+    ports:
+      - "8080:8080" 
+    mem_limit: 512m
+  
+  transaction:
+    build:
+      context: ./transaction
+      dockerfile: ../Dockerfile.jdk17
+    container_name: transaction-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      - mysql
+      - kafka
+    ports:
+      - "8082:8080" 
+    mem_limit: 512m
+  
+  account:
+    build:
+      context: ./account
+      dockerfile: ../Dockerfile.jdk21
+    container_name: account-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      - mysql
+      - kafka
+    ports:
+      - "8084:8080" 
+    mem_limit: 512m
+  
+  bff:
+    build:
+      context: ./bff
+      dockerfile: ../Dockerfile.jdk21
+    container_name: bff-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      - mysql
+      - kafka
+    ports:
+      - "8085:8080" 
+    mem_limit: 512m
+  
+  logging:
+    build:
+      context: ./logging
+      dockerfile: ../Dockerfile.jdk21
+    container_name: logging-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      - mysql
+      - kafka
+    ports:
+      - "8086:8080" 
+    mem_limit: 512m
+ 
