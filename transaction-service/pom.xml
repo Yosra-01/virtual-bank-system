@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.virtualBank</groupId>
-	<artifactId>Transaction</artifactId>
+	<artifactId>transaction-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Transaction</name>
 	<description>Transaction microservice for a virtual bank</description>
