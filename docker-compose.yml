@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   kafka:
@@ -42,7 +41,7 @@ services:
  
   user:
     build:
-      context: ./user
+      context: ./user-service
       dockerfile: ../Dockerfile.jdk21
     container_name: user-service
     environment:
@@ -56,7 +55,7 @@ services:
   
   transaction:
     build:
-      context: ./transaction
+      context: ./transaction-service
       dockerfile: ../Dockerfile.jdk17
     container_name: transaction-service
     environment:
@@ -70,7 +69,7 @@ services:
   
   account:
     build:
-      context: ./account
+      context: ./account-service
       dockerfile: ../Dockerfile.jdk21
     container_name: account-service
     environment:
@@ -84,7 +83,7 @@ services:
   
   bff:
     build:
-      context: ./bff
+      context: ./bff-service
       dockerfile: ../Dockerfile.jdk21
     container_name: bff-service
     environment:
@@ -98,7 +97,7 @@ services:
   
   logging:
     build:
-      context: ./logging
+      context: ./logging-service
       dockerfile: ../Dockerfile.jdk21
     container_name: logging-service
     environment:
