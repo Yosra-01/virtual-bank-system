@@ -42,7 +42,7 @@ services:
   user:
     build:
       context: .
-      dockerfile: Dockerfile.jdk21
+      dockerfile: Dockerfile-jdk21
       args:
        SERVICE: user-service
     container_name: user-service
@@ -58,7 +58,7 @@ services:
   transaction:
     build:
       context: .
-      dockerfile: Dockerfile.jdk17
+      dockerfile: Dockerfile-jdk17
       args:
        SERVICE: transaction-service
     container_name: transaction-service
@@ -74,7 +74,7 @@ services:
   account:
     build:
       context: .
-      dockerfile: Dockerfile.jdk21
+      dockerfile: Dockerfile-jdk21
       args:
        SERVICE: account-service
     container_name: account-service
@@ -90,7 +90,7 @@ services:
   bff:
     build:
       context: .
-      dockerfile: Dockerfile.jdk21
+      dockerfile: Dockerfile-jdk21
       args:
        SERVICE: bff-service
     container_name: bff-service
@@ -106,7 +106,7 @@ services:
   logging:
     build:
       context: .
-      dockerfile: Dockerfile.jdk21
+      dockerfile: Dockerfile-jdk21
       args:
        SERVICE: logging-service
     container_name: logging-service
