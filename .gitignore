@@ -1,6 +1,8 @@
 # Maven/Gradle build folders
 target/
 build/
+**/target/
+
 
 # JARs
 *.jar
