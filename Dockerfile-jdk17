@@ -1,11 +1,20 @@
+# ========= Base Image =========
 FROM openjdk:17-jdk-slim
 
+# ========= Args =========
+# Pass the service name (e.g., user, transaction, account, etc.)
+ARG SERVICE
+
+# ========= Workdir =========
 WORKDIR /app
 
-COPY target/*.jar app.jar
+# ========= Copy Jar =========
+# Each service is assumed to build its own JAR inside its folder's /target
+COPY ${SERVICE}/target/*.jar app.jar
 
+# ========= Ports & JVM Options =========
 EXPOSE 8080
-
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
 
+# ========= Entry Point =========
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

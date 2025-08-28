@@ -41,8 +41,10 @@ services:
  
   user:
     build:
-      context: ./user-service
-      dockerfile: ../Dockerfile.jdk21
+      context: .
+      dockerfile: Dockerfile.jdk21
+      args:
+       SERVICE: user-service
     container_name: user-service
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
@@ -55,8 +57,10 @@ services:
   
   transaction:
     build:
-      context: ./transaction-service
-      dockerfile: ../Dockerfile.jdk17
+      context: .
+      dockerfile: Dockerfile.jdk17
+      args:
+       SERVICE: transaction-service
     container_name: transaction-service
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
@@ -69,8 +73,10 @@ services:
   
   account:
     build:
-      context: ./account-service
-      dockerfile: ../Dockerfile.jdk21
+      context: .
+      dockerfile: Dockerfile.jdk21
+      args:
+       SERVICE: account-service
     container_name: account-service
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
@@ -83,8 +89,10 @@ services:
   
   bff:
     build:
-      context: ./bff-service
-      dockerfile: ../Dockerfile.jdk21
+      context: .
+      dockerfile: Dockerfile.jdk21
+      args:
+       SERVICE: bff-service
     container_name: bff-service
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
@@ -97,8 +105,10 @@ services:
   
   logging:
     build:
-      context: ./logging-service
-      dockerfile: ../Dockerfile.jdk21
+      context: .
+      dockerfile: Dockerfile.jdk21
+      args:
+       SERVICE: logging-service
     container_name: logging-service
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
