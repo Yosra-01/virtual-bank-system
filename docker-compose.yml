@@ -27,6 +27,7 @@ services:
     mem_limit: 512m
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql 
     healthcheck:
      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
      interval: 10s
@@ -133,4 +134,6 @@ services:
     ports:
       - "8086:8080" 
     mem_limit: 512m
- 
+
+volumes:
+  mysql_data:
