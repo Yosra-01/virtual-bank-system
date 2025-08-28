@@ -27,6 +27,11 @@ services:
     mem_limit: 512m
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
 
   wso2am:
     image: wso2/wso2am:latest
@@ -49,8 +54,10 @@ services:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
-      - mysql
-      - kafka
+      - mysql:
+        condition: service_healthy
+      - kafka:
+        condition: service_started
     ports:
       - "8080:8080" 
     mem_limit: 512m
@@ -65,8 +72,10 @@ services:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
-      - mysql
-      - kafka
+      - mysql:
+        condition: service_healthy
+      - kafka:
+        condition: service_started
     ports:
       - "8082:8080" 
     mem_limit: 512m
@@ -81,8 +90,10 @@ services:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
-      - mysql
-      - kafka
+      - mysql:
+        condition: service_healthy
+      - kafka:
+        condition: service_started
     ports:
       - "8084:8080" 
     mem_limit: 512m
@@ -97,8 +108,10 @@ services:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
-      - mysql
-      - kafka
+      - mysql:
+        condition: service_healthy
+      - kafka:
+        condition: service_started
     ports:
       - "8085:8080" 
     mem_limit: 512m
@@ -113,8 +126,10 @@ services:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
-      - mysql
-      - kafka
+      - mysql:
+        condition: service_healthy
+      - kafka:
+        condition: service_started
     ports:
       - "8086:8080" 
     mem_limit: 512m
