@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.project.bank.account_service.model.AccountType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.bank.account_service.dto.AccountRequest;
 import com.project.bank.account_service.dto.AccountResponse;
@@ -80,35 +81,34 @@ public class AccountService {
         sender.setBalance(sender.getBalance().subtract(amount));
         receiver.setBalance(receiver.getBalance().add(amount));
 
-        accountRepo.save(sender);
-        accountRepo.save(receiver);
-
-
         //keep track for scheduled job
         sender.setLastTransaction(LocalDateTime.now());
         receiver.setLastTransaction(LocalDateTime.now());
 
+        sender.setStatus(AccountStatus.ACTIVE);
+        receiver.setStatus(AccountStatus.ACTIVE);
+
+        accountRepo.save(sender);
+        accountRepo.save(receiver);
+
     }
 
+
     //scheduled job service logic
+    @Transactional
+    @Scheduled(fixedRate = 3_600_000) //1 hour in msec
     public void deactivateStaleAccounts(){
 
-        LocalDateTime cutoffTime = LocalDateTime.now().minusSeconds(30);
-        List<Account> staleAccounts = accountRepo.findByStatusAndLastTransactionBefore(AccountStatus.ACTIVE, cutoffTime);
+        LocalDateTime cutoffTime = LocalDateTime.now().minusDays(1);
+        List<Account> staleAccounts = accountRepo.findStaleAccounts(AccountStatus.ACTIVE, cutoffTime);
 
-        for (Account account : staleAccounts) {
-            account.setStatus(AccountStatus.INACTIVE);
-        } 
+        staleAccounts.forEach(account -> account.setStatus(AccountStatus.INACTIVE));
 
         accountRepo.saveAll(staleAccounts);
 
     }
     
-    @Scheduled(fixedRate = 30_000) //1 hour in msec
-    public void scheduledJob(){
-        deactivateStaleAccounts();
-    }
-
+    
     public List<Account> getActiveSavingsAccounts() {
         return accountRepo.findByStatusAndAccountType(AccountStatus.valueOf("ACTIVE"), AccountType.SAVINGS);
     }
