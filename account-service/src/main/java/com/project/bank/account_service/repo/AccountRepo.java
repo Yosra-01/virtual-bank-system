@@ -21,5 +21,6 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
     //scheduled job 
     List<Account> findByStatusAndLastTransactionBefore(AccountStatus status, LocalDateTime cutoffTime);
 
-    List<Account> findByStatusAndAccountType(String status, AccountType accountType);
+    List<Account> findByStatusAndAccountType(AccountStatus status, AccountType accountType);
+
 }

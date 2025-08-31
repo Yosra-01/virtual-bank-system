@@ -110,7 +110,7 @@ public class AccountService {
     }
 
     public List<Account> getActiveSavingsAccounts() {
-        return accountRepo.findByStatusAndAccountType("ACTIVE", AccountType.SAVINGS);
+        return accountRepo.findByStatusAndAccountType(AccountStatus.valueOf("ACTIVE"), AccountType.SAVINGS);
     }
 
 }

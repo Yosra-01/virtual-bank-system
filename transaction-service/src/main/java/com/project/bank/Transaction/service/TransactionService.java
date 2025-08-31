@@ -32,8 +32,8 @@ public class TransactionService {
     @Value("${account.service.base-url:http://localhost:8084}")
     private String accountServiceBaseUrl;
 
-    @Value("${transaction.system-account-id}")
-    private UUID systemAccountId;
+    //@Value("${transaction.system-account-id}")
+    private final UUID systemAccountId = UUID.fromString("6b0b5c62-3d8f-4d0a-983b-7a4aa762883a");
 
     @Value("${interest.daily.rate:0.05}")
     private double interestRate;
@@ -119,7 +119,7 @@ public class TransactionService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void creditDailyInterest() {
         AccountSummary[] accounts = restTemplate.getForObject(
-                accountServiceBaseUrl + "/users/all/active-savings", AccountSummary[].class);
+                accountServiceBaseUrl + "/accounts/savings", AccountSummary[].class);
         if (accounts == null) return;
         for (AccountSummary acc : accounts) {
             if (acc.getAccountId().equals(systemAccountId.toString())) {

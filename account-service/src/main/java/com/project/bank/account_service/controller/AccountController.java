@@ -3,7 +3,11 @@ package com.project.bank.account_service.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.project.bank.account_service.dto.AccountSummary;
 import com.project.bank.account_service.model.Account;
+import com.project.bank.account_service.model.AccountStatus;
+import com.project.bank.account_service.model.AccountType;
+import com.project.bank.account_service.repo.AccountRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,19 +119,9 @@ public class AccountController {
     }
 
     //For scheduled job in transactions
-    @GetMapping("/users/all/active-savings")
-    public ResponseEntity<List<AccountResponse>> getActiveSavingsAccounts() {
-
-        loggingProducer.sendLog(null , "Request");
-
-        List<Account> accounts = accountService.getActiveSavingsAccounts();
-        if (accounts.isEmpty()) return ResponseEntity.notFound().build();
-        List<AccountResponse> out = accounts.stream()
-                .map(AccountResponse::from)
-                .toList();
-        
-        loggingProducer.sendLog(out, "Response");        
-        return ResponseEntity.ok(out);
+    @GetMapping("/accounts/savings")
+    public List<Account> getSavingsAccounts() {
+        return accountService.getActiveSavingsAccounts();
     }
 
 }
