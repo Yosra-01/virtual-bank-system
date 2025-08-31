@@ -33,7 +33,7 @@ public class TransactionService {
     private String accountServiceBaseUrl;
 
     //@Value("${transaction.system-account-id}")
-    private final UUID systemAccountId = UUID.fromString("6b0b5c62-3d8f-4d0a-983b-7a4aa762883a");
+    private final UUID systemAccountId = UUID.fromString("e61b2b59-6812-4d31-ba02-e796ee657ebc");
 
     @Value("${interest.daily.rate:0.05}")
     private double interestRate;

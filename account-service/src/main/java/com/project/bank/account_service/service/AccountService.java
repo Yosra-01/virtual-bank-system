@@ -93,7 +93,7 @@ public class AccountService {
     //scheduled job service logic
     public void deactivateStaleAccounts(){
 
-        LocalDateTime cutoffTime = LocalDateTime.now().minusHours(24);
+        LocalDateTime cutoffTime = LocalDateTime.now().minusSeconds(30);
         List<Account> staleAccounts = accountRepo.findByStatusAndLastTransactionBefore(AccountStatus.ACTIVE, cutoffTime);
 
         for (Account account : staleAccounts) {
@@ -104,7 +104,7 @@ public class AccountService {
 
     }
     
-    @Scheduled(fixedRate = 3_600_000) //1 hour in msec
+    @Scheduled(fixedRate = 30_000) //1 hour in msec
     public void scheduledJob(){
         deactivateStaleAccounts();
     }
